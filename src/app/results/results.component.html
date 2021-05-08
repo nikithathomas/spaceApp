@@ -1,0 +1,19 @@
+<div *ngIf="responseStatus" class="text-center pt-5">
+<h2>
+    Success! Congratulations on Finding Falcone. King Shan is mighty pleased
+</h2>
+<h3>
+    Time Taken: {{timeTaken}}
+</h3>
+<h3>
+    Planet found: {{planetName}}
+</h3>
+</div>
+<div *ngIf="!responseStatus" class="text-center pt-5">
+    <h2>
+        Sorry we could not find Falcone,Please try again.
+    </h2>
+</div>
+<div class="text-center pt-5 pb-5">
+    <button (click)="navigateHome()">Start Again</button>
+</div>

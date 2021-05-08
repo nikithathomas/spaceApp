@@ -1,0 +1,163 @@
+<main class="space-main">
+<h2 class="text-center space-main__subheading">Select planets you want to search in:</h2>
+<form [formGroup]="spaceVehicleForm" class="space-form">
+  <div class="d-flex space-form__container">
+    <section formGroupName="firstSpaceSelection" class="space-form__section">
+    <div>
+      <label for="firstDestination">Destination 1</label>
+      <div>
+      <select name="" id="firstDestination" formControlName="firstPlanetSelect" (change)="planetChange('firstSpaceSelection','firstVehicleSelect')" required>
+        <option value="">Select</option>
+        <option
+          *ngFor="let planet of planetsArray; let i = index"
+          value="{{ i }}"
+        >
+          {{ planet.name }}
+        </option>
+      </select>
+    </div>
+    </div>
+    <div
+      [class.invisible]="
+        !displayVehicleSelectionOrNot('firstSpaceSelection', 'firstPlanetSelect')
+      "
+    >
+      <div *ngFor="let vehicle of vehiclesArray" class="space-form__vehicle">
+        <input
+          required
+          [attr.disabled]="
+            disableVehicleOrNot('firstSpaceSelection', 'firstVehicleSelect','firstPlanetSelect',vehicle)
+          "
+          type="radio"
+          value="{{ vehicle.index }}"
+          formControlName="firstVehicleSelect"
+          id="firstVehicle{{ vehicle.name }}"
+          (change)="vehicleChange()"
+        />
+        <label for="firstVehicle{{ vehicle.name }}" class="space-form__label"
+          >{{ vehicle.name }}&nbsp;({{ vehicle.total_no }})</label
+        >
+      </div>
+    </div>
+  </section>
+  <section formGroupName="secondSpaceSelection" class="space-form__section">
+    <div>
+        <label for="secondDestination">Destination 2</label>
+        <div>
+        <select name="" id="secondDestination" formControlName="secondPlanetSelect" (change)="planetChange('secondSpaceSelection','secondVehicleSelect')" required>
+          <option value="">Select</option>
+          <option
+            *ngFor="let planet of planetsArray; let i = index"
+            value="{{ i }}"
+          >
+            {{ planet.name }}
+          </option>
+        </select>
+    </div>
+      </div>
+      <div
+        [class.invisible]="
+          !displayVehicleSelectionOrNot('secondSpaceSelection', 'secondPlanetSelect')
+        "
+      >
+        <div *ngFor="let vehicle of vehiclesArray"class="space-form__vehicle">
+          <input
+            required
+            [attr.disabled]="
+              disableVehicleOrNot('secondSpaceSelection', 'secondVehicleSelect','secondPlanetSelect',vehicle)
+            "
+            type="radio"
+            value="{{ vehicle.index }}"
+            formControlName="secondVehicleSelect"
+            id="secondVehicle{{ vehicle.name }}"
+            (change)="vehicleChange()"
+          />
+          <label for="secondVehicle{{ vehicle.name }}" class="space-form__label"
+            >{{ vehicle.name }}&nbsp;({{ vehicle.total_no }})</label
+          >
+        </div>
+      </div>
+  </section>
+  <section formGroupName="thirdSpaceSelection" class="space-form__section">
+    <div>
+        <label for="thirdDestination">Destination 3</label>
+        <div>
+        <select name="" id="thirdDestination" formControlName="thirdPlanetSelect" (change)="planetChange('thirdSpaceSelection','thirdVehicleSelect')" required>
+          <option value="">Select</option>
+          <option
+            *ngFor="let planet of planetsArray; let i = index"
+            value="{{ i }}"
+          >
+            {{ planet.name }}
+          </option>
+        </select>
+    </div>
+      </div>
+      <div
+        [class.invisible]="
+          !displayVehicleSelectionOrNot('thirdSpaceSelection', 'thirdPlanetSelect')
+        "
+      >
+        <div *ngFor="let vehicle of vehiclesArray" class="space-form__vehicle">
+          <input
+            required
+            [attr.disabled]="
+              disableVehicleOrNot('thirdSpaceSelection', 'thirdVehicleSelect','thirdPlanetSelect',vehicle)
+            "
+            type="radio"
+            value="{{ vehicle.index }}"
+            formControlName="thirdVehicleSelect"
+            id="thirdVehicle{{ vehicle.name }}"
+            (change)="vehicleChange()"
+          />
+          <label for="thirdVehicle{{ vehicle.name }}" class="space-form__label"
+            >{{ vehicle.name }}&nbsp;({{ vehicle.total_no }})</label
+          >
+        </div>
+      </div>
+  </section>
+  <section formGroupName="fourthSpaceSelection" class="space-form__section">
+    <div>
+        <label for="fourthDestination">Destination 4</label>
+        <div>
+        <select name="" id="fourthDestination" formControlName="fourthPlanetSelect" (change)="planetChange('fourthSpaceSelection','fourthVehicleSelect')" required>
+          <option value="">Select</option>
+          <option
+            *ngFor="let planet of planetsArray; let i = index"
+            value="{{ i }}"
+          >
+            {{ planet.name }}
+          </option>
+        </select>
+    </div>
+      </div>
+      <div
+        [class.invisible]="
+          !displayVehicleSelectionOrNot('fourthSpaceSelection', 'fourthPlanetSelect')
+        "
+      >
+        <div *ngFor="let vehicle of vehiclesArray" class="space-form__vehicle">
+          <input
+            required
+            [attr.disabled]="
+              disableVehicleOrNot('fourthSpaceSelection', 'fourthVehicleSelect','fourthPlanetSelect',vehicle)
+            "
+            type="radio"
+            value="{{ vehicle.index }}"
+            formControlName="fourthVehicleSelect"
+            id="fourthVehicle{{ vehicle.name }}"
+            (change)="vehicleChange()"
+          />
+          <label for="fourthVehicle{{ vehicle.name }}" class="space-form__label"
+            >{{ vehicle.name }}&nbsp;({{ vehicle.total_no }})</label
+          >
+        </div>
+      </div>
+  </section>
+  <div>Time Taken: {{totalTimeTaken}}</div>
+</div>
+<div class="text-center space-form__button">
+    <button [attr.disabled]="spaceVehicleForm.valid?null:''" (click)="submitDestinationDecisions()">Find Falcone!</button>
+</div>
+</form>
+</main>

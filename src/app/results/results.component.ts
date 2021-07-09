@@ -13,6 +13,8 @@ export class ResultsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
+
+    // obtaining query parameters to decide which message should be displayed on the page
     this.route.queryParams.subscribe((params) => {
       this.responseStatus = params.get('responseStatus');
       this.planetName = params.get('planetName');

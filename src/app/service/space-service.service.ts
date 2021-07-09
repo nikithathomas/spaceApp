@@ -16,12 +16,17 @@ export class SpaceServiceService {
 
   constructor(private httpCli: HttpClient) {}
 
+  // An ajax call to obtain the planets
   getPlanets() {
     return this.httpCli.get<Array<Planet>>(this.getPlanetsUrl);
   }
+
+  // An ajax call to get the vehicles
   getVehicles() {
     return this.httpCli.get<Array<Vehicle>>(this.getVehiclesUrl);
   }
+
+  // An ajax call done to obtain the authorization token
   getPostToken() {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -34,6 +39,8 @@ export class SpaceServiceService {
       httpOptions
     );
   }
+
+  // An ajax call done to submit the Falcone Request
   postFalconeSubmission(requestBody: string) {
     const httpOptions = {
       headers: new HttpHeaders({

@@ -1,16 +1,17 @@
-<main class="space-main">
+<main class="space-main container-fluid">
 <h2 class="text-center space-main__subheading">Select planets you want to search in:</h2>
 <form [formGroup]="spaceVehicleForm" class="space-form">
-  <div class="d-flex space-form__container">
+  <div class="space-form__container">
     <section formGroupName="firstSpaceSelection" class="space-form__section">
     <div>
       <label for="firstDestination">Destination 1</label>
       <div>
-      <select name="" id="firstDestination" formControlName="firstPlanetSelect" (change)="planetChange('firstSpaceSelection','firstVehicleSelect')" required>
+      <select name="" id="firstDestination" class="space-form__select" formControlName="firstPlanetSelect" (change)="planetChange('firstSpaceSelection','firstVehicleSelect')" required>
         <option value="">Select</option>
         <option
           *ngFor="let planet of planetsArray; let i = index"
           value="{{ i }}"
+          [attr.disabled]="disablePlanetOrNot(i,planet,'firstPlanetSelect','firstSpaceSelection')"
         >
           {{ planet.name }}
         </option>
@@ -44,11 +45,12 @@
     <div>
         <label for="secondDestination">Destination 2</label>
         <div>
-        <select name="" id="secondDestination" formControlName="secondPlanetSelect" (change)="planetChange('secondSpaceSelection','secondVehicleSelect')" required>
+        <select name="" id="secondDestination" class="space-form__select" formControlName="secondPlanetSelect" (change)="planetChange('secondSpaceSelection','secondVehicleSelect')" required>
           <option value="">Select</option>
           <option
             *ngFor="let planet of planetsArray; let i = index"
             value="{{ i }}"
+            [attr.disabled]="disablePlanetOrNot(i,planet,'secondPlanetSelect','secondSpaceSelection')"
           >
             {{ planet.name }}
           </option>
@@ -60,7 +62,7 @@
           !displayVehicleSelectionOrNot('secondSpaceSelection', 'secondPlanetSelect')
         "
       >
-        <div *ngFor="let vehicle of vehiclesArray"class="space-form__vehicle">
+        <div *ngFor="let vehicle of vehiclesArray" class="space-form__vehicle">
           <input
             required
             [attr.disabled]="
@@ -82,11 +84,12 @@
     <div>
         <label for="thirdDestination">Destination 3</label>
         <div>
-        <select name="" id="thirdDestination" formControlName="thirdPlanetSelect" (change)="planetChange('thirdSpaceSelection','thirdVehicleSelect')" required>
+        <select name="" id="thirdDestination" class="space-form__select" formControlName="thirdPlanetSelect" (change)="planetChange('thirdSpaceSelection','thirdVehicleSelect')" required>
           <option value="">Select</option>
           <option
             *ngFor="let planet of planetsArray; let i = index"
             value="{{ i }}"
+            [attr.disabled]="disablePlanetOrNot(i,planet,'thirdPlanetSelect','thirdSpaceSelection')"
           >
             {{ planet.name }}
           </option>
@@ -120,11 +123,12 @@
     <div>
         <label for="fourthDestination">Destination 4</label>
         <div>
-        <select name="" id="fourthDestination" formControlName="fourthPlanetSelect" (change)="planetChange('fourthSpaceSelection','fourthVehicleSelect')" required>
+        <select name="" id="fourthDestination" class="space-form__select" formControlName="fourthPlanetSelect" (change)="planetChange('fourthSpaceSelection','fourthVehicleSelect')" required>
           <option value="">Select</option>
           <option
             *ngFor="let planet of planetsArray; let i = index"
             value="{{ i }}"
+            [attr.disabled]="disablePlanetOrNot(i,planet,'fourthPlanetSelect','fourthSpaceSelection')"
           >
             {{ planet.name }}
           </option>
@@ -154,10 +158,11 @@
         </div>
       </div>
   </section>
-  <div>Time Taken: {{totalTimeTaken}}</div>
+  <div class="space-form__total">Time Taken: {{totalTimeTaken}}</div>
 </div>
+
 <div class="text-center space-form__button">
-    <button [attr.disabled]="spaceVehicleForm.valid?null:''" (click)="submitDestinationDecisions()">Find Falcone!</button>
+    <button [attr.disabled]="spaceVehicleForm.valid ? null : ''" (click)="submitDestinationDecisions()">Find Falcone!</button>
 </div>
 </form>
 </main>

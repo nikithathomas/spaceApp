@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Planet } from '../models/Planet';
 import { Vehicle } from '../models/Vehicle';
 import { SpaceServiceService } from '../service/space-service.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { ResponseToken } from '../models/ResponseToken';
 import { FalconeResponse } from '../models/FalconeResponse';
 import { Router } from '@angular/router';
@@ -48,11 +51,15 @@ export class SpaceVehicleComponent implements OnInit {
     this.numericMap.set(1, 'second');
     this.numericMap.set(2, 'third');
     this.numericMap.set(3, 'fourth');
+
+    // To obtain the selection of planets to populate the dropdowns
     this.spaceService.getPlanets().subscribe((planets: Array<Planet>) => {
       planets.forEach((planet: Planet) => {
         this.planetsArray.push(new Planet(planet.name, planet.distance));
       });
     });
+
+    // To obtain the selection of vehicles to populate the radio buttons
     this.spaceService.getVehicles().subscribe((vehicles: Array<Vehicle>) => {
       vehicles.forEach((vehicle: Vehicle, index) => {
         this.vehiclesArray.push(
@@ -66,18 +73,47 @@ export class SpaceVehicleComponent implements OnInit {
         );
       });
     });
+
+    // To obtain the token necessary to submit the falcone destinations
     this.spaceService.getPostToken().subscribe((response: ResponseToken) => {
       this.postToken = response.token;
     });
   }
+
+  // To Display the vehicle selection
   displayVehicleSelectionOrNot(
     selectedFormGroup: string,
     selectedSelect: string
   ): number {
+    // To check whether there is a selection of the planet dropdown done
     return this.spaceVehicleForm.get(selectedFormGroup)?.get(selectedSelect)
       ?.value?.length;
   }
 
+
+  // To decide whether to disable a planet or not
+  disablePlanetOrNot(
+    optionIndex: number,
+    planet: Planet,
+    planetSelect: string,
+    planetSelectGroup: string
+  ) {
+    // Checking whether the current planet option has been already selected
+    const isPlanetSelected = planet.selected;
+
+    // Getting the current selection of the dropdown
+    const currentPlanetSelection = this.spaceVehicleForm
+      .get(planetSelectGroup)
+      ?.get(planetSelect)?.value;
+
+    /* Checking whether the index of the current option matches the
+    current selection and whether the specific planet option's object was selected */
+    return optionIndex !== parseInt(currentPlanetSelection, 10) && isPlanetSelected
+      ? ''
+      : null;
+  }
+
+  // To decide whether to disable the vehicle or not
   disableVehicleOrNot(
     selectedFormGroup: string,
     selectedRadio: string,
@@ -93,14 +129,16 @@ export class SpaceVehicleComponent implements OnInit {
     const selectedPlanetVal = this.spaceVehicleForm
       .get(selectedFormGroup)
       ?.get(selectedPlanetSelect)?.value;
-    const selectedPlanetDistance = this.planetsArray[
-      parseInt(selectedPlanetVal, 10)
-    ]?.distance;
+    const selectedPlanetDistance =
+      this.planetsArray[parseInt(selectedPlanetVal, 10)]?.distance;
+    /* Checking the criteria of whether the vehicle radio button has to be disabled or not */
     return (!whetherSelected && vehicleTotalNo === 0) ||
       selectedPlanetDistance > vehicle.max_distance
       ? ''
       : null;
   }
+
+  // Getting the specific vehicles selected
   gettingVehicleValues(): Map<any, any> {
     const vehicleSelectionMap = new Map();
     for (let i = 0; i < 4; i++) {
@@ -117,13 +155,15 @@ export class SpaceVehicleComponent implements OnInit {
     }
     return vehicleSelectionMap;
   }
+
+  // Getting the specific planets selected
   gettingPlanetValues(): Map<any, any> {
     const planetSelectMap = new Map();
     for (let i = 0; i < 4; i++) {
-      const vehicleSelected = this.numericMap.get(i);
+      const planetSelected = this.numericMap.get(i);
       const selectionVal = this.spaceVehicleForm
-        .get(`${vehicleSelected}SpaceSelection`)
-        ?.get(`${vehicleSelected}PlanetSelect`)?.value;
+        .get(`${planetSelected}SpaceSelection`)
+        ?.get(`${planetSelected}PlanetSelect`)?.value;
       planetSelectMap.set(
         i,
         selectionVal !== '' && selectionVal !== null
@@ -133,6 +173,8 @@ export class SpaceVehicleComponent implements OnInit {
     }
     return planetSelectMap;
   }
+
+  // To calculate the total time taken by the vehicles to reach the destination planets
   calculateTotalTimeTaken(vehicleSelectionMap: Map<any, any>): void {
     // resetting the total time taken
     this.totalTimeTaken = 0;
@@ -141,18 +183,24 @@ export class SpaceVehicleComponent implements OnInit {
     for (let i = 0; i < 4; i++) {
       const planetMapVal = planetSelectMap.get(i);
       const vehicleMapVal = vehicleSelectionMap.get(i);
+
+      // Obtaining Distance to the specific selected planet
       const selectedPlanetDistance =
         planetMapVal !== -1 ? this.planetsArray[planetMapVal]?.distance : 0;
 
+      // Obtaining Speed of the specific selected vehicle
       const selectedVehicleSpeed =
         vehicleMapVal !== -1 ? this.vehiclesArray[vehicleMapVal]?.speed : 0;
       const timeTaken =
         selectedPlanetDistance === 0 || selectedVehicleSpeed === 0
           ? 0
           : selectedPlanetDistance / selectedVehicleSpeed;
+      // Incrementing the total time taken for the space vehicles to reach their destinations
       this.totalTimeTaken = this.totalTimeTaken + timeTaken;
     }
   }
+
+  // Function called on change of the vehicle radio buttons
   vehicleChange(): void {
     // resetting totals to original values
     this.vehiclesArray.forEach((selectedVehicle) => {
@@ -169,15 +217,31 @@ export class SpaceVehicleComponent implements OnInit {
 
     this.calculateTotalTimeTaken(vehicleSelectionMap);
   }
+
+  // Function called on change of the planet dropdowns
   planetChange(
     selectedFormGroup: string,
-    selectedVehicleSection: string
+    selectedVehicleSection: string,
   ): void {
+    // resetting planet selected flags on planets
+    this.planetsArray.forEach((planet) => {
+      planet.selected = false;
+    });
+
+    // setting the flag for the specific planets selected from the dropdowns
+    const planetSelectionMap = this.gettingPlanetValues();
+    for (const [key, val] of planetSelectionMap.entries()) {
+      if (val !== -1) {
+        this.planetsArray[val].selected = true;
+      }
+    }
     this.spaceVehicleForm
       .get(selectedFormGroup)
       ?.get(selectedVehicleSection)
       ?.reset();
   }
+
+  // Submitting Planet and Vehicle decisions to find Falcone
   submitDestinationDecisions(): void {
     const vehicleMap = this.gettingVehicleValues();
     const planetMap = this.gettingPlanetValues();
@@ -190,11 +254,15 @@ export class SpaceVehicleComponent implements OnInit {
     for (const [key, val] of planetMap.entries()) {
       planetRequestArray.push(this.planetsArray[val].name);
     }
+
+    // Request Body created
     const requestBody = {
       token: this.postToken,
       planet_names: vehicleRequestArray,
       vehicle_names: planetRequestArray,
     };
+
+    // Submitting Falcone request and obtaining response for the same with the redirect happening to the Results page
     this.spaceService
       .postFalconeSubmission(JSON.stringify(requestBody))
       .subscribe((response: FalconeResponse) => {

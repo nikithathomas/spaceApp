@@ -1,4 +1,4 @@
-<section *ngIf="responseStatus" class="text-center pt-5 pl-4 pr-4">
+<section *ngIf="responseStatus" class="text-center pt-5 pl-4 pr-4 space-results">
 <h2>
     Success! Congratulations on Finding Falcone. King Shan is mighty pleased
 </h2>
@@ -15,5 +15,5 @@
     </h2>
 </div>
 <div class="text-center pt-5 pb-5">
-    <button (click)="navigateHome()">Start Again</button>
+    <button (click)="navigateHome()" class="space-results__start">Start Again</button>
 </div>

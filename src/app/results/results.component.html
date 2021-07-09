@@ -1,4 +1,4 @@
-<div *ngIf="responseStatus" class="text-center pt-5 pl-4 pr-4">
+<section *ngIf="responseStatus" class="text-center pt-5 pl-4 pr-4">
 <h2>
     Success! Congratulations on Finding Falcone. King Shan is mighty pleased
 </h2>
@@ -8,10 +8,10 @@
 <h3>
     Planet found: {{planetName}}
 </h3>
-</div>
+</section>
 <div *ngIf="!responseStatus" class="text-center pt-5 pl-4 pr-4">
     <h2>
-        Sorry we could not find Falcone,Please try again.
+        Sorry we could not find Falcone, Please try again.
     </h2>
 </div>
 <div class="text-center pt-5 pb-5">
